@@ -4,7 +4,6 @@ import 'package:Teledax/screens/listfiles/search_file.dart';
 import 'package:Teledax/style/constants.dart';
 
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class FilesScreen extends StatefulWidget {
   @override
@@ -13,6 +12,13 @@ class FilesScreen extends StatefulWidget {
 
 class _FilesScreenState extends State<FilesScreen> {
   Map<String, dynamic> data = {};
+
+  @override
+  void initState() {
+//TODO use async func api call
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

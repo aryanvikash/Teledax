@@ -1,16 +1,24 @@
 # Teledax
 
-A new Flutter project.
+A Telegram Index Client app written in Flutter.
 
-## Getting Started
+## what It can do ?
 
-This project is a starting point for a Flutter application.
+    it can list All your Telegram channel or group file in app .
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- it can play any Type Of media File in app
+- inbuilt Audio / Video player
+- You can download File Using external download manager
+- search files in Channel or group
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## TODO
+
+- Add pagination
+- Add Your Own api from client side
+- Can share api session to any other users with a help of private key
+
+- Get rid of This ugly UI
+
+[This App Using This Telegram index Api ](https://github.com/odysseusmax/tg-index)
