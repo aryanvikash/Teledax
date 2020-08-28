@@ -21,7 +21,7 @@ A Telegram Index Client app written in Flutter.
 
 - Get rid of This ugly UI
 
-[This App Using This Telegram index Api By odysseusmax ](https://github.com/odysseusmax/tg-index)
+[App Using Telegram index Api By odysseusmax ](https://github.com/odysseusmax/tg-index)
 
 ### Thanks For This Api ❤️
 
