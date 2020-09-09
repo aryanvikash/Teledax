@@ -3,7 +3,7 @@ description: A Telegram Index Client.
 
 publish_to: "none"
 
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -16,14 +16,29 @@ dependencies:
   chewie: ^0.9.10
   video_player: ^0.10.12
   audioplayers: ^0.16.0
-
+  # sqlite
+  sqflite: ^1.2.0
+  #path module
+  path_provider: ^1.5.1
+  #shared pref
+  shared_preferences: ^0.5.10
   #material icon
   material_design_icons_flutter: ^4.0.5345
   url_launcher: ^5.5.0
   cached_network_image: ^2.2.0+1
-
   # ios
   cupertino_icons: ^0.1.3
+  package_info: ^0.4.3
+
+  #flutter_svg: ^0.18.1
+
+  android_intent: ^0.3.7+3
+  # audio player notification
+  flutter_media_notification:
+    git:
+      url: https://github.com/bykenx/flutter_media_notification.git
+      ref: master
+  fluttertoast: ^7.0.4
 
 dev_dependencies:
   flutter_test:

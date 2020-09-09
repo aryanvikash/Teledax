@@ -3,27 +3,38 @@ import 'package:Teledax/models/chatid_model.dart';
 import 'package:Teledax/models/searchmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-const baseurl = "https://teledax.aryanvikash.com";
+//
+// const baseurl = "https://teledax.aryanvikash.com";
 
-Future<Chatid> getchatid() async {
+Future<Chatid> getchatid({baseurl}) async {
   try {
     final response = await http.get(Uri.encodeFull(baseurl));
+
+    //only accept json response
+    if (response.headers['content-type'] != "application/json; charset=utf-8") {
+      print(response.headers);
+      throw Exception("response is not application/json; charset=utf-8");
+    }
     if (response.statusCode == 200) {
       return chatidFromJson(response.body);
     } else {
-      throw Exception('Failed to Load Data');
+      throw 'Failed to Load Data';
     }
   } catch (e) {
     throw e;
   }
 }
 
-Future getFiles(chatid) async {
+Future getFiles({chatid, baseurl}) async {
   print('$baseurl/$chatid');
   try {
     final response = await http.get('$baseurl/$chatid');
+
+    if (response.headers['content-type'] != "application/json; charset=utf-8") {
+      print(response.headers);
+      throw Exception("response is not application/json; charset=utf-8");
+    }
 
     if (response.statusCode == 200) {
       final chatitems = chatItemsFromJson(response.body);
@@ -38,7 +49,8 @@ Future getFiles(chatid) async {
   }
 }
 
-Future<SearchItem> searchInTg({@required chatid, @required query}) async {
+Future<SearchItem> searchInTg(
+    {@required chatid, @required query, @required baseurl}) async {
   try {
     final response = await http.get('$baseurl/$chatid?search=$query');
     print('$baseurl/$chatid?search=$query');

@@ -1,7 +1,11 @@
+import 'package:Teledax/screens/common/developer_tiles.dart';
 import 'package:Teledax/style/constants.dart';
 import 'package:Teledax/util/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:package_info/package_info.dart';
+
+import 'common/reuseable_items.dart';
 
 class Dev extends StatefulWidget {
   @override
@@ -9,158 +13,96 @@ class Dev extends StatefulWidget {
 }
 
 class _DevState extends State<Dev> {
+  var version;
+  var buildNumber;
+
+  setversion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    setversion();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: Column(
-        children: [
-          Wrap(
-            direction: Axis.horizontal,
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(10),
+          child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 40),
-                child: Center(
-                  child: Text(
-                    "About",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+              Wrap(
+                direction: Axis.horizontal,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 40),
+                    child: Center(
+                      child: Text(
+                        "About",
+                        style: TextStyle(color: fontColor, fontSize: 20),
+                      ),
+                    ),
                   ),
+                ],
+              ),
+              Image.asset("images/logo.png"),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(
+                  "TeleDax",
+                  style: TextStyle(color: fontColor, fontSize: 30),
                 ),
               ),
+              SizedBox(height: 20),
+              _devsinfo()
             ],
           ),
-          Image.asset("images/logo.png"),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Text(
-              "TeleDax",
-              style: TextStyle(color: Colors.white, fontSize: 30),
-            ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Version ${version} || Build ${buildNumber}",
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: _aryaninfo(),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: _odinfo(),
-          ),
-        ],
-      )),
+        ),
+      ),
     );
   }
 }
 
-Widget _aryaninfo() {
+Widget _devsinfo() {
   return Card(
-    color: darkCardColor,
+    elevation: 1,
+    color: cardLightColor,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
     ),
-    elevation: 20,
-    child: ListTile(
-      leading: Container(
-        height: 50,
-        width: 50,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: NetworkImage(
-                "https://avatars3.githubusercontent.com/u/31583400"),
-          ),
+    child: Column(
+      children: [
+        developerTile(
+            name: "Aryan vikash",
+            githubUsername: "aryanvikash",
+            profileImage: "https://avatars3.githubusercontent.com/u/31583400",
+            telegramUsername: "aryanvikash",
+            devtype: "App Developer"),
+        SizedBox(
+          height: 10,
         ),
-      ),
-      title: Text(
-        "Aryan Vikash",
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.white,
-        ),
-        textAlign: TextAlign.center,
-      ),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(left: 50, top: 5),
-        child: Text(
-          "App Developer",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      trailing: Wrap(
-        direction: Axis.horizontal,
-        children: [
-          IconButton(
-            icon: Icon(
-              MdiIcons.github,
-            ),
-            onPressed: () async {
-              await launchurl("https://github.com/aryanvikash");
-            },
-          ),
-          IconButton(
-            icon: Icon(MdiIcons.telegram, color: Colors.blueAccent),
-            onPressed: () async {
-              await launchurl("https://telegram.me/aryanvikash");
-            },
-          )
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _odinfo() {
-  return Card(
-    color: darkCardColor,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-    elevation: 20,
-    child: ListTile(
-      leading: Container(
-        height: 50,
-        width: 50,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: NetworkImage(
-                "https://avatars1.githubusercontent.com/u/35767464"),
-          ),
-        ),
-      ),
-      title: Text(
-        "Christy Roys",
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.white,
-        ),
-        textAlign: TextAlign.center,
-      ),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(left: 50, top: 5),
-        child: Text(
-          "Thanks For Beautiful Api ❤️",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      trailing: Wrap(
-        direction: Axis.horizontal,
-        children: [
-          IconButton(
-            icon: Icon(
-              MdiIcons.github,
-            ),
-            onPressed: () async {
-              await launchurl("https://github.com/odysseusmax");
-            },
-          ),
-          IconButton(
-            icon: Icon(MdiIcons.telegram, color: Colors.blueAccent),
-            onPressed: () async {
-              await launchurl("https://telegram.me/odysseusmax");
-            },
-          )
-        ],
-      ),
+        buildDivider(),
+        developerTile(
+            name: "Christy Roys",
+            githubUsername: "odysseusmax",
+            profileImage: "https://avatars1.githubusercontent.com/u/35767464",
+            telegramUsername: "odysseusmax",
+            devtype: "Api Developer"),
+      ],
     ),
   );
 }

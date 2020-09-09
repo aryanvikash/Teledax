@@ -1,12 +1,12 @@
 import 'package:Teledax/api/Api.dart';
-import 'package:Teledax/models/searchmodel.dart';
 import 'package:Teledax/screens/common/item_card.dart';
+import 'package:Teledax/style/constants.dart';
 import 'package:flutter/material.dart';
 
 class FileSearch extends SearchDelegate {
   var chatid;
-
-  FileSearch({@required this.chatid});
+  var baseurl;
+  FileSearch({@required this.chatid, @required this.baseurl});
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -38,11 +38,12 @@ class FileSearch extends SearchDelegate {
         ? Center(
             child: Text(
               "No Data",
-              style: TextStyle(color: Colors.white, fontSize: 20),
+              style: TextStyle(color: fontColor, fontSize: 20),
             ),
           )
         : FutureBuilder(
-            future: searchInTg(chatid: chatid.toString(), query: query),
+            future: searchInTg(
+                chatid: chatid.toString(), query: query, baseurl: baseurl),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final snap = snapshot.data;
@@ -51,7 +52,7 @@ class FileSearch extends SearchDelegate {
                   return Center(
                     child: Text(
                       "Search Not Found",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: fontColor, fontSize: 20),
                     ),
                   );
                 }
@@ -62,13 +63,23 @@ class FileSearch extends SearchDelegate {
                     child: ItemCard(
                       item: items[index],
                       chatId: chatid,
+                      baseurl: baseurl,
                     ),
                   ),
                 );
               } else if (snapshot.hasError) {
-                return Text(
-                  snapshot.error.toString(),
-                  style: TextStyle(color: Colors.white),
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        child: Image.asset("images/not-found.png"),
+                      ),
+                    ),
+                    Text("Something went wrong"),
+                  ],
                 );
               }
               return Center(child: CircularProgressIndicator());
@@ -81,7 +92,7 @@ class FileSearch extends SearchDelegate {
     return Center(
         child: Text(
       "No recent Search Found",
-      style: TextStyle(color: Colors.white, fontSize: 20),
+      style: TextStyle(color: fontColor, fontSize: 20),
     ));
   }
 }

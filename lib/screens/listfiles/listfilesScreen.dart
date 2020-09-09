@@ -2,7 +2,6 @@ import 'package:Teledax/api/Api.dart';
 import 'package:Teledax/screens/common/item_card.dart';
 import 'package:Teledax/screens/listfiles/search_file.dart';
 import 'package:Teledax/style/constants.dart';
-
 import 'package:flutter/material.dart';
 
 class FilesScreen extends StatefulWidget {
@@ -12,27 +11,21 @@ class FilesScreen extends StatefulWidget {
 
 class _FilesScreenState extends State<FilesScreen> {
   Map<String, dynamic> data = {};
-
-  @override
-  void initState() {
-//TODO use async func api call
-
-    super.initState();
-  }
-
+  var baseurl;
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
-
+    baseurl = data["baseurl"];
     return Scaffold(
-      backgroundColor: darkcolor,
+      backgroundColor: lightColor,
       appBar: AppBar(
-        backgroundColor: darkcolor,
+        backgroundColor: lightColor,
         centerTitle: true,
+        elevation: 0,
         title: Text(
           data['chat'].name,
           style: TextStyle(
-            color: Colors.white,
+            color: fontColor,
             fontSize: 15,
           ),
         ),
@@ -40,17 +33,18 @@ class _FilesScreenState extends State<FilesScreen> {
           IconButton(
               icon: Icon(
                 Icons.search,
-                color: Colors.white,
+                color: fontColor,
               ),
               onPressed: () {
                 showSearch(
                     context: context,
-                    delegate: FileSearch(chatid: data['chat'].id.toString()));
+                    delegate: FileSearch(
+                        chatid: data['chat'].id.toString(), baseurl: baseurl));
               })
         ],
       ),
       body: FutureBuilder(
-          future: getFiles(data['chat'].id.toString()),
+          future: getFiles(chatid: data['chat'].id, baseurl: baseurl),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final chatitem = snapshot.data;
@@ -59,16 +53,36 @@ class _FilesScreenState extends State<FilesScreen> {
               return ListView.builder(
                 itemCount: items.length,
                 itemBuilder: (context, index) {
-                  return ItemCard(
-                    item: items[index],
-                    chatId: data['chat'].id,
+                  return SingleChildScrollView(
+                    padding: EdgeInsets.all(4),
+                    child: Card(
+                      elevation: 2,
+                      child: ItemCard(
+                        item: items[index],
+                        chatId: data['chat'].id,
+                        baseurl: baseurl,
+                      ),
+                    ),
                   );
                 },
               );
             } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Container(
+                        height: 100,
+                        width: 100,
+                        child: Image.asset("images/not-found.png")),
+                  ),
+                  Text("Something went wrong"),
+                ],
+              );
             }
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }),
     );
   }

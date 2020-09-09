@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
-const Color darkcolor = Color(0xff24292E);
-const Color darkCardColor = Color(0xff31363F);
-const Color accents = Colors.redAccent;
+const Color lightColor = Color(0xffFCFCFC);
+const Color cardLightColor = Color(0xffFFFFFF);
+const Color accents = Color(0xffFF2525);
+const Color fontColor = Color(0xff000000);
+const Color SecondaryColor = Colors.greenAccent;

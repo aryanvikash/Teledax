@@ -1,8 +1,9 @@
 import 'package:Teledax/style/constants.dart';
-import 'package:video_player/video_player.dart';
-
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:video_player/video_player.dart';
 
 class MyCustomVideoPlayer extends StatefulWidget {
   // This will contain the URL/asset path which we want to play
@@ -33,24 +34,40 @@ class _MyCustomVideoPlayerState extends State<MyCustomVideoPlayer> {
       // Prepare the video to be played and display the first frame
       autoInitialize: true,
       looping: widget.looping,
+      allowedScreenSleep: false,
+      allowFullScreen: true,
+      autoPlay: true,
+      fullScreenByDefault: true,
       showControlsOnInitialize: true,
       materialProgressColors: ChewieProgressColors(
         playedColor: Colors.red,
         handleColor: Colors.blue,
-        backgroundColor: darkcolor,
+        backgroundColor: lightColor,
         bufferedColor: Colors.lightGreen,
       ),
-      placeholder: Container(
-        color: Colors.grey,
-      ),
-      // Errors can occur for example when trying to play a video
-      // from a non-existent URL
+
       errorBuilder: (context, errorMessage) {
-        return Center(
-          child: Text(
-            errorMessage,
-            style: TextStyle(color: Colors.blue, backgroundColor: Colors.white),
-          ),
+        //TODO Add better error builder
+        Fluttertoast.showToast(
+            msg: errorMessage.toString(),
+            toastLength: Toast.LENGTH_LONG,
+            backgroundColor: accents,
+            gravity: ToastGravity.BOTTOM);
+        return Scaffold(
+          body: Center(
+              child: Column(
+            children: [
+              Text(
+                errorMessage.toString(),
+                style: TextStyle(color: fontColor, backgroundColor: lightColor),
+                textAlign: TextAlign.center,
+              ),
+              IconButton(
+                icon: Icon(MdiIcons.backspace),
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+          )),
         );
       },
     );

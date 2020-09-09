@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:Teledax/style/constants.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_media_notification/flutter_media_notification.dart';
 
 enum PlayerState { stopped, playing, paused }
 enum PlayingRouteState { speakers, earpiece }
@@ -24,7 +28,7 @@ class PlayerWidget extends StatefulWidget {
 class _PlayerWidgetState extends State<PlayerWidget> {
   String url;
   PlayerMode mode;
-
+  var _isaudioPlayback;
   AudioPlayer _audioPlayer;
   AudioPlayerState _audioPlayerState;
   Duration _duration;
@@ -50,18 +54,38 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   @override
   void initState() {
-    super.initState();
+    SharedPreferences.getInstance().then((pref) {
+      _isaudioPlayback = pref.getBool("audioplayback") ?? false;
+    });
+
     _initAudioPlayer();
+
+    MediaNotification.setListener('pause', () {
+      _pause();
+      setState(() {});
+    });
+
+    MediaNotification.setListener('play', () {
+      _play();
+      setState(() {});
+    });
+    MediaNotification.setListener('select', () {});
+
+    super.initState();
   }
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
-    _durationSubscription?.cancel();
-    _positionSubscription?.cancel();
-    _playerCompleteSubscription?.cancel();
-    _playerErrorSubscription?.cancel();
-    _playerStateSubscription?.cancel();
+    if (!_isaudioPlayback) {
+      _stop();
+      MediaNotification.hideNotification();
+      _audioPlayer.dispose();
+      _durationSubscription?.cancel();
+      _positionSubscription?.cancel();
+      _playerCompleteSubscription?.cancel();
+      _playerErrorSubscription?.cancel();
+      _playerStateSubscription?.cancel();
+    }
     super.dispose();
   }
 
@@ -70,44 +94,18 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              key: Key('play_button'),
-              onPressed: _isPlaying ? null : () => _play(),
-              iconSize: 64.0,
-              icon: Icon(Icons.play_arrow),
-              color: Colors.cyan,
-            ),
-            IconButton(
-              key: Key('pause_button'),
-              onPressed: _isPlaying ? () => _pause() : null,
-              iconSize: 64.0,
-              icon: Icon(Icons.pause),
-              color: Colors.cyan,
-            ),
-            IconButton(
-              key: Key('stop_button'),
-              onPressed: _isPlaying || _isPaused ? () => _stop() : null,
-              iconSize: 64.0,
-              icon: Icon(Icons.stop),
-              color: Colors.cyan,
-            ),
-          ],
-        ),
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(1.0),
               child: Stack(
                 children: [
                   Slider(
                     onChanged: (v) {
-                      final Position = v * _duration.inMilliseconds;
+                      final _position = v * _duration.inMilliseconds;
                       _audioPlayer
-                          .seek(Duration(milliseconds: Position.round()));
+                          .seek(Duration(milliseconds: _position.round()));
                     },
                     value: (_position != null &&
                             _duration != null &&
@@ -123,7 +121,28 @@ class _PlayerWidgetState extends State<PlayerWidget> {
               _position != null
                   ? '${_positionText ?? ''} / ${_durationText ?? ''}'
                   : _duration != null ? _durationText : '',
-              style: TextStyle(fontSize: 24.0),
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              key: Key(_isPlaying ? 'pause_button' : "play_button"),
+              onPressed: () async {
+                if (_isPlaying) {
+                  await _pause();
+                } else {
+                  await _play();
+                }
+
+                setState(() {});
+              },
+              iconSize: 64.0,
+              icon:
+                  Icon(_isPlaying ? MdiIcons.pauseCircle : MdiIcons.playCircle),
+              color: accents,
             ),
           ],
         ),
@@ -138,23 +157,16 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     _durationSubscription = _audioPlayer.onDurationChanged.listen((duration) {
       setState(() => _duration = duration);
 
-      if (Theme.of(context).platform == TargetPlatform.iOS) {
-        // (Optional) listen for notification updates in the background
-        _audioPlayer.startHeadlessService();
-
-        // set at least title to see the notification bar on ios.
-        _audioPlayer.setNotification(
-            title: 'App Name',
-            artist: 'Artist or blank',
-            albumTitle: 'Name or blank',
-            imageUrl: 'url or blank',
-            forwardSkipInterval: const Duration(seconds: 30), // default is 30s
-            backwardSkipInterval: const Duration(seconds: 30), // default is 30s
-            duration: duration,
-            elapsedTime: Duration(seconds: 0));
-      } else if (Theme.of(context).platform == TargetPlatform.android) {
-        // TODO implement for android part
-        debugPrint("notfication Not implemented");
+      if (Theme.of(context).platform == TargetPlatform.android) {
+        // _audioPlayer.startHeadlessService();
+        MediaNotification.showNotification(
+          isPlaying: true,
+          title: 'Teledax',
+          cover: 'https://telegra.ph/file/0cf78a69f558d747a3804.png',
+          position: _position,
+          duration: _duration,
+          rate: 1.0,
+        );
       }
     });
 
@@ -216,18 +228,17 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   Future<int> _pause() async {
     final result = await _audioPlayer.pause();
     if (result == 1) setState(() => _playerState = PlayerState.paused);
+    MediaNotification.showNotification(
+      isPlaying: false,
+      title: 'Teledax',
+      cover: 'https://telegra.ph/file/0cf78a69f558d747a3804.png',
+      position: _position,
+      duration: _duration,
+      rate: 1.0,
+    );
+
     return result;
   }
-
-  // Future<int> _earpieceOrSpeakersToggle() async {
-  //   final result = await _audioPlayer.earpieceOrSpeakersToggle();
-  //   if (result == 1)
-  //     setState(() => _playingRouteState =
-  //         _playingRouteState == PlayingRouteState.speakers
-  //             ? PlayingRouteState.earpiece
-  //             : PlayingRouteState.speakers);
-  //   return result;
-  // }
 
   Future<int> _stop() async {
     final result = await _audioPlayer.stop();
