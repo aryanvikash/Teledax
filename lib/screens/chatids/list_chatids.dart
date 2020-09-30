@@ -22,7 +22,6 @@ class _ChatIdsState extends State<ChatIds> {
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
     baseurl = data["baseurl"];
-    print(data);
 
     return Scaffold(
       backgroundColor: lightColor,
@@ -81,7 +80,6 @@ class _ChatIdsState extends State<ChatIds> {
             },
           );
         } else if (snapshot.hasError) {
-          debugPrint(snapshot.error.toString());
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

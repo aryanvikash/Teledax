@@ -20,9 +20,9 @@ class ChatItems {
   });
 
   List<ItemList> itemList;
-  bool prevPage;
+  dynamic prevPage;
   int curPage;
-  bool nextPage;
+  dynamic nextPage;
   String search;
   String name;
   dynamic logo;

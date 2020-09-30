@@ -25,7 +25,7 @@ showAutoIntent({@required url, @required mimeType}) async {
     try {
       await intent.launch();
     } catch (e) {
-      print(e);
+      debugPrint(e);
     }
   } else if (Platform.isAndroid && mimeType.contains("audio")) {
     AndroidIntent intent = AndroidIntent(
@@ -36,7 +36,7 @@ showAutoIntent({@required url, @required mimeType}) async {
     try {
       await intent.launch();
     } catch (e) {
-      print(e);
+      debugPrint(e);
     }
   } else {
     await launchurl(url);

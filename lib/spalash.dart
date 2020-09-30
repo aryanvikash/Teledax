@@ -38,12 +38,11 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.of(context).popAndPushNamed("/chatids",
             arguments: {"baseurl": idResult[0]['url']});
       } else {
-        print(prefs.getKeys());
         Navigator.of(context).popAndPushNamed("/addapi");
       }
     } else {
       prefs.clear();
-      print(prefs.getKeys());
+
       Navigator.of(context).popAndPushNamed("/addapi");
     }
   }

@@ -41,10 +41,15 @@ class ItemCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(
-                        item.mimeType,
-                        style: TextStyle(
-                          color: fontColor,
+                      Flexible(
+                        child: Container(
+                          child: Text(
+                            item.mimeType,
+                            style: TextStyle(
+                              color: fontColor,
+                            ),
+                            overflow: TextOverflow.clip,
+                          ),
                         ),
                       ),
                       Text(

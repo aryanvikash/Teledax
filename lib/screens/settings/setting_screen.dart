@@ -151,6 +151,15 @@ class _SettingsState extends State<Settings> {
           ),
           buildDivider(),
           ListTile(
+            onTap: () => launchurl("https://telegra.ph/Teledax-tutorial-09-13"),
+            title: Text("How To Use ?"),
+            trailing: Icon(
+              MdiIcons.frequentlyAskedQuestions,
+              color: SecondaryColor,
+            ),
+          ),
+          buildDivider(),
+          ListTile(
             onTap: () => Navigator.of(context).pushNamed("/devs"),
             title: Text("About"),
             trailing: Icon(
@@ -170,7 +179,7 @@ class _SettingsState extends State<Settings> {
         children: [
           ListTile(
             onTap: () => Navigator.of(context).pushNamed("/addapi"),
-            title: Text("Manage Api"),
+            title: Text("Manage Apis"),
             trailing: Icon(
               MdiIcons.plus,
               color: accents,

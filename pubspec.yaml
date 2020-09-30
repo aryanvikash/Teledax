@@ -3,18 +3,19 @@ description: A Telegram Index Client.
 
 publish_to: "none"
 
-version: 1.0.1+1
+version: 1.0.2+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
+
 
 dependencies:
   flutter:
     sdk: flutter
   http: ^0.12.2
   # video player
-  chewie: ^0.9.10
-  video_player: ^0.10.12
+  # chewie: ^0.9.10
+  # video_player: ^0.10.12
   audioplayers: ^0.16.0
   # sqlite
   sqflite: ^1.2.0
@@ -39,11 +40,13 @@ dependencies:
       url: https://github.com/bykenx/flutter_media_notification.git
       ref: master
   fluttertoast: ^7.0.4
+  #vlc video player
+  flutter_vlc_player: ^3.0.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  change_app_package_name: ^0.1.2
+
 
 flutter:
   uses-material-design: true

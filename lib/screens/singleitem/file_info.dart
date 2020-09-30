@@ -115,7 +115,6 @@ class _FIleInfoState extends State<FIleInfo> {
       "$baseurl/${data['chatid']}/${item.fileId}/thumbnail",
       fit: BoxFit.contain,
       errorBuilder: (context, error, stackTrace) {
-        print(error);
         return Image.asset(
           "images/not-found.png",
         );
