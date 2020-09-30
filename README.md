@@ -21,9 +21,11 @@ A Telegram Index Client app written in Flutter.
 
 ### TODO
 
-- [x]Add pagination
+- [x] Add pagination
 - [x] Add Your Own api from client side
 - [ ] Can share api session to any other users with a help of private key
+
+Note: Vlc library increased  apk size upto 80+ mb so this version is not avalible on playstore .
 
 ### [App Using Telegram index Api By odysseusmax ](https://github.com/odysseusmax/tg-index)
 
